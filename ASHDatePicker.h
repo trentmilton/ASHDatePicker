@@ -19,7 +19,7 @@
 }
 
 @property (strong, nonatomic) NSPopover *popover;
-@property (strong, nonatomic) id <ASHDatePickerDelegate> delegate;
+@property (strong, nonatomic) id <ASHDatePickerDelegate> datePickerDelegate;
 
 /**
  * The preferred edge at which to display the popover.

@@ -10,10 +10,6 @@
 
 @implementation ASHDatePicker
 
-@synthesize popover = _popover;
-@synthesize delegate = _delegate;
-@synthesize preferredPopoverEdge = _preferredPopoverEdge;
-
 - (void)popoverDateAction
 {
     self.dateValue = controller.datePicker.dateValue;
@@ -35,11 +31,11 @@
     controller.datePicker.action = @selector(popoverDateAction);
     [controller.datePicker bind:NSValueBinding toObject:self withKeyPath:@"dateValue" options:nil];
     
-    _popover = [[NSPopover alloc] init];
-    _popover.contentViewController = controller;
-    _popover.behavior = NSPopoverBehaviorSemitransient;
+    self.popover = [[NSPopover alloc] init];
+    self.popover.contentViewController = controller;
+    self.popover.behavior = NSPopoverBehaviorSemitransient;
     
-    _preferredPopoverEdge = NSMaxXEdge;
+    self.preferredPopoverEdge = NSMaxXEdge;
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -63,10 +59,10 @@
     showingPopover = YES;
     controller.datePicker.dateValue = self.dateValue;
     
-    if (![_delegate respondsToSelector:@selector(datePickerShouldShowPopover:)]
-        || [_delegate datePickerShouldShowPopover:self]) {
+    if (![self.datePickerDelegate respondsToSelector:@selector(datePickerShouldShowPopover:)]
+        || [self.datePickerDelegate datePickerShouldShowPopover:self]) {
         
-        [_popover showRelativeToRect:self.bounds ofView:self preferredEdge:_preferredPopoverEdge];
+        [self.popover showRelativeToRect:self.bounds ofView:self preferredEdge:self.preferredPopoverEdge];
     }
     
     showingPopover = NO;
@@ -76,15 +72,13 @@
 - (BOOL)resignFirstResponder
 {
     if (showingPopover) return NO;
-    [_popover close];
+    [self.popover close];
     return [super resignFirstResponder];
 }
 
 @end
 
 @implementation ASHDatePickerController
-
-@synthesize datePicker = _datePicker;
 
 - (id)init
 {
@@ -94,11 +88,11 @@
         NSView *popoverView = [[NSView alloc] initWithFrame:viewFrame];
         
         NSRect pickerFrame = NSMakeRect(22.0f, 17.0f, 139.0f, 148.0f);
-        _datePicker = [[NSDatePicker alloc] initWithFrame:pickerFrame];
-        _datePicker.datePickerStyle = NSClockAndCalendarDatePickerStyle;
-        _datePicker.drawsBackground = NO;
-        [_datePicker.cell setBezeled:NO];
-        [popoverView addSubview:_datePicker];
+        self.datePicker = [[NSDatePicker alloc] initWithFrame:pickerFrame];
+        self.datePicker.datePickerStyle = NSClockAndCalendarDatePickerStyle;
+        self.datePicker.drawsBackground = NO;
+        [self.datePicker.cell setBezeled:NO];
+        [popoverView addSubview:self.datePicker];
         self.view = popoverView;
     }
     
